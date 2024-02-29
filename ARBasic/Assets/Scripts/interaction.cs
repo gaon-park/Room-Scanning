@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 
 public class interaction : MonoBehaviour
 {
@@ -194,9 +195,10 @@ public class interaction : MonoBehaviour
     void MakeFloor()
     {
         //float avgX = 0f;
-        float avgY = 0f;        
+        float avgY = 0f;
         //float avgZ = 0f;
-        for (int i = 0; i < fixedPins.Count; i++)
+        int numVertices = fixedPins.Count - 1;
+        for (int i = 0; i < numVertices; i++)
         {
             //avgX += fixedPins[i].transform.position.x;
             avgY += fixedPins[i].transform.position.y;
@@ -206,7 +208,7 @@ public class interaction : MonoBehaviour
         avgY /= fixedPins.Count;
         //avgZ /= fixedPins.Count;
 
-        int numVertices = fixedPins.Count;
+        
         Vector3[] vertices = new Vector3[numVertices];
         for(int i = 0; i < numVertices; i++)
         {
@@ -313,5 +315,14 @@ public class interaction : MonoBehaviour
             walls.SetActive(true);
         }
     }
+       
 
+    void CheckConfirm()
+    {
+        Physics.Raycast(ray, out hit, Mathf.Infinity, pinMask);
+        if (Input.GetMouseButton(0))
+        {
+            
+        }
+    }
 }
