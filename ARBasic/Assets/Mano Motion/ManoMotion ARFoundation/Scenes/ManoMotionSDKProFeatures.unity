@@ -6962,7 +6962,7 @@ PrefabInstance:
       objectReference: {fileID: 157089619}
     - target: {fileID: 114251843207838166, guid: 3b19460acec7fad4baeab3db2a8268e1, type: 3}
       propertyPath: _licenseKey
-      value: 
+      value: GKBNM-UPFRJ-GWKCR-NOHFK
       objectReference: {fileID: 0}
     - target: {fileID: 114656061702543436, guid: 3b19460acec7fad4baeab3db2a8268e1, type: 3}
       propertyPath: statusAnimator
