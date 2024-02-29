@@ -319,7 +319,7 @@ public class interaction : MonoBehaviour
 
     void CheckConfirm()
     {
-        Physics.Raycast(ray, out hit, Mathf.Infinity, pinMask);
+        //Physics.Raycast(ray, out hit, Mathf.Infinity, pinMask);
         if (Input.GetMouseButton(0))
         {
             
