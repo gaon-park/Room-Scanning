@@ -4,7 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Mano Motion/ManoMotion ARFoundation/Scenes/ManoMotionSDKProFeatures.unity
+    guid: 2e8ecbb9ea2e340009ac8d7dd6fbd854
+  - enabled: 1
+    path: Assets/Scenes/GroundDetection.unity
+    guid: 6aaab08e779a82642a045db8c8b580d3
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 0c67fc6da36f9994c979644cf01ca3a6, type: 2}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: d2e7df3e29f9a574d858cb7890f9290b, type: 2}

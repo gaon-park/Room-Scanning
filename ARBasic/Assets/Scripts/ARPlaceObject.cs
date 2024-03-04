@@ -24,6 +24,8 @@ public class ARPlaceObject : MonoBehaviour
     private List<GameObject> placedPins = new List<GameObject>();
     private List<GameObject> placedLines = new List<GameObject>();
 
+    public LayerMask pinMask;
+    public GameObject mark;
     void Update()
     {
         if (isMakingFloor)
@@ -43,6 +45,7 @@ public class ARPlaceObject : MonoBehaviour
         var screenCenter = arCamera.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
         var hits = new List<ARRaycastHit>();
         raycastManager.Raycast(screenCenter, hits, TrackableType.Planes);
+        
         if (hits.Count > 0)
         {
             placementPose = hits[0].pose;
@@ -69,6 +72,18 @@ public class ARPlaceObject : MonoBehaviour
         else
         {
             placementIndicator.SetActive(false);
+        }
+
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        RaycastHit hit;
+        // 레이가 어떤 오브젝트와 충돌했는지 검사합니다.
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, pinMask))
+        {
+            mark.SetActive(true);
+        }
+        else
+        {
+            mark.SetActive(false);
         }
     }
 
@@ -116,18 +131,21 @@ public class ARPlaceObject : MonoBehaviour
     {
         if (currentLine == null)
             return;
+        currentLine.SetActive(placementIndicator.activeSelf);
+        if (placementIndicator.activeSelf)
+        {
+            Vector3 direction = (placementPose.position - currentLineFixedPose).normalized;
 
-        Vector3 direction = (placementPose.position - currentLineFixedPose).normalized;
+            // 오브젝트의 회전을 방향 벡터에 맞게 조정
+            currentLine.transform.rotation = Quaternion.LookRotation(direction);
 
-        // 오브젝트의 회전을 방향 벡터에 맞게 조정
-        currentLine.transform.rotation = Quaternion.LookRotation(direction);
+            // 거리에 따른 스케일 조정 (예시로, 여기서는 Z축 스케일을 조정합니다)
+            float distance = Vector3.Distance(currentLineFixedPose, placementPose.position);
+            currentLine.transform.localScale = new Vector3(currentLine.transform.localScale.x, currentLine.transform.localScale.y, distance);
 
-        // 거리에 따른 스케일 조정 (예시로, 여기서는 Z축 스케일을 조정합니다)
-        float distance = Vector3.Distance(currentLineFixedPose, placementPose.position);
-        currentLine.transform.localScale = new Vector3(currentLine.transform.localScale.x, currentLine.transform.localScale.y, distance);
-
-        // 오브젝트의 위치를 조정 (고정점과 마우스 위치의 중간점으로 설정)
-        currentLine.transform.position = currentLineFixedPose + direction * distance / 2;
+            // 오브젝트의 위치를 조정 (고정점과 마우스 위치의 중간점으로 설정)
+            currentLine.transform.position = currentLineFixedPose + direction * distance / 2;
+        }
     }
 
     /**
@@ -135,7 +153,14 @@ public class ARPlaceObject : MonoBehaviour
      */
     void FixPin()
     {
-        placedPins.Add(Instantiate(pinPrefab, placementPose.position, Quaternion.identity));
+        
+        if (placedPins.Count == 0)
+        {
+            GameObject currentPin = Instantiate(pinPrefab, placementPose.position, Quaternion.identity);
+            currentPin.layer = LayerMask.NameToLayer("Pin");
+        }
+        else
+            placedPins.Add(Instantiate(pinPrefab, placementPose.position, Quaternion.identity));
         if (currentLine != null)
             placedLines.Add(currentLine);
 
